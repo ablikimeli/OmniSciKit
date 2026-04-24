@@ -3,7 +3,8 @@ Type: Package
 Title: Multi-Domain Integrated Research Toolbox for Biomedical and Public Health Research
 Version: 0.1.0
 Authors@R: c(
-    person("Ablikim", "Ali", email = "ablikim.ali@example.com", role = c("aut", "cre")),
+    person("Abel", "Ali", email = "medical_stat@163.com", role = c("aut", "cre")),
+    person("Ablikim", "Ali", role = c("aut")),
     person("OmniSciKit", "Team", role = c("ctb"))
     )
 Description: A unified R meta-package that integrates bioinformatics, Mendelian randomization,
@@ -89,5 +90,5 @@ Suggests:
     patchwork,
     gridExtra
 VignetteBuilder: knitr
-URL: https://github.com/ablikim/OmniSciKit
-BugReports: https://github.com/ablikim/OmniSciKit/issues
+URL: https://github.com/ablikimeli/OmniSciKit
+BugReports: https://github.com/ablikimeli/OmniSciKit/issues

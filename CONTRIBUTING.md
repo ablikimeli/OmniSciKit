@@ -51,7 +51,7 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 install.packages("devtools")
 
 # Clone the repository
-git clone https://github.com/yourusername/OmniSciKit.git
+git clone https://github.com/ablikimeli/OmniSciKit.git
 cd OmniSciKit
 
 # Load the package in development mode

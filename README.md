@@ -1,6 +1,6 @@
 # OmniSciKit
 
-[![R-CMD-check](https://github.com/yourusername/OmniSciKit/workflows/R-CMD-check/badge.svg)](https://github.com/yourusername/OmniSciKit/actions)
+[![R-CMD-check](https://github.com/ablikimeli/OmniSciKit/workflows/R-CMD-check/badge.svg)](https://github.com/ablikimeli/OmniSciKit/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
@@ -20,7 +20,7 @@ OmniSciKit is a comprehensive R package for scientific research, providing a uni
 
 ```r
 # install.packages("devtools")
-devtools::install_github("yourusername/OmniSciKit")
+devtools::install_github("ablikimeli/OmniSciKit")
 ```
 
 ### From Source
@@ -138,9 +138,9 @@ citation("OmniSciKit")
 
 ## Contact
 
-- Author: Ablikim Ali
-- Email: ablikim.ali@example.com
-- GitHub: https://github.com/yourusername/OmniSciKit
+- Authors: Abel Ali, Ablikim Ali
+- Email: medical_stat@163.com
+- GitHub: https://github.com/ablikimeli/OmniSciKit
 
 ## Acknowledgments
 
