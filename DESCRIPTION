@@ -1,0 +1,93 @@
+Package: OmniSciKit
+Type: Package
+Title: Multi-Domain Integrated Research Toolbox for Biomedical and Public Health Research
+Version: 0.1.0
+Authors@R: c(
+    person("Ablikim", "Ali", email = "ablikim.ali@example.com", role = c("aut", "cre")),
+    person("OmniSciKit", "Team", role = c("ctb"))
+    )
+Description: A unified R meta-package that integrates bioinformatics, Mendelian randomization,
+    machine learning, infectious disease modeling, medical statistics, and sample size calculation
+    into a consistent interface. It features intelligent dependency management and one-click report
+    generation. The package provides comprehensive tools for multi-omics data analysis, causal inference,
+    predictive modeling, epidemiological simulation, statistical testing, and power analysis.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.3
+Depends: R (>= 4.0.0)
+Imports:
+    renv (>= 0.15.0),
+    pak (>= 0.5.0),
+    ggplot2 (>= 3.4.0),
+    dplyr (>= 1.1.0),
+    tibble (>= 3.2.0),
+    tidyr (>= 1.3.0),
+    rlang (>= 1.1.0),
+    cli (>= 3.6.0),
+    withr (>= 2.5.0),
+    utils,
+    stats,
+    graphics,
+    grDevices,
+    methods
+Suggests:
+    BiocManager,
+    DESeq2,
+    edgeR,
+    limma,
+    clusterProfiler,
+    org.Hs.eg.db,
+    TCGAbiolinks,
+    GEOquery,
+    SummarizedExperiment,
+    TwoSampleMR,
+    MendelianRandomization,
+    ieugwasr,
+    mr.raps,
+    MRPRESSO,
+    RadialMR,
+    caret,
+    randomForest,
+    xgboost,
+    glmnet,
+    e1071,
+    pROC,
+    ROCR,
+    survival,
+    survminer,
+    deSolve,
+    EpiModel,
+    network,
+    statnet,
+    pwr,
+    samplesize,
+    powerAnalysis,
+    tableone,
+    gtsummary,
+    broom,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    covr,
+    pkgdown,
+    devtools,
+    roxygen2,
+    DBI,
+    RSQLite,
+    RMariaDB,
+    RPostgres,
+    mongolite,
+    shiny,
+    shinydashboard,
+    plotly,
+    heatmaply,
+    viridis,
+    RColorBrewer,
+    ggpubr,
+    ggrepel,
+    patchwork,
+    gridExtra
+VignetteBuilder: knitr
+URL: https://github.com/ablikim/OmniSciKit
+BugReports: https://github.com/ablikim/OmniSciKit/issues
