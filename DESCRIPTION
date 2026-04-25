@@ -3,9 +3,7 @@ Type: Package
 Title: Multi-Domain Integrated Research Toolbox for Biomedical and Public Health Research
 Version: 0.1.0
 Authors@R: c(
-    person("Abel", "Ali", email = "medical_stat@163.com", role = c("aut", "cre")),
-    person("Ablikim", "Ali", role = c("aut")),
-    person("OmniSciKit", "Team", role = c("ctb"))
+    person("Ablikim", "Ali", email = "medical_stat@163.com", role = c("aut", "cre"))
     )
 Description: A unified R meta-package that integrates bioinformatics, Mendelian randomization,
     machine learning, infectious disease modeling, medical statistics, and sample size calculation
@@ -18,15 +16,12 @@ LazyData: true
 RoxygenNote: 7.3.3
 Depends: R (>= 4.0.0)
 Imports:
-    renv (>= 0.15.0),
-    pak (>= 0.5.0),
     ggplot2 (>= 3.4.0),
     dplyr (>= 1.1.0),
     tibble (>= 3.2.0),
     tidyr (>= 1.3.0),
     rlang (>= 1.1.0),
     cli (>= 3.6.0),
-    withr (>= 2.5.0),
     utils,
     stats,
     graphics,

@@ -1,14 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.github$
 ^\.git$
+^\.github$
 ^cran-comments\.md$
 ^README\.Rmd$
-^LICENSE\.md$
-^data-raw$
-^vignettes/.*_cache$
-^vignettes/.*_files$
 ^\.travis\.yml$
 ^appveyor\.yml$
-^codecov\.yml$
-^\.covrignore$
