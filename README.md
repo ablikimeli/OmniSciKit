@@ -8,13 +8,15 @@
 ## 📦 安装
 
 ```r
-# 从GitHub安装
-if (!requireNamespace("devtools", quietly = TRUE))
-    install.packages("devtools")
-devtools::install_github("ablikimeli/OmniSciKit")
+# 推荐：使用pak安装（自动处理依赖）
+if (!requireNamespace("pak", quietly = TRUE))
+    install.packages("pak")
+pak::pak("ablikimeli/OmniSciKit")
 
-# 或从本地tar.gz安装
-install.packages("OmniSciKit_0.2.0.tar.gz", repos = NULL, type = "source")
+# 或使用devtools
+# if (!requireNamespace("devtools", quietly = TRUE))
+#     install.packages("devtools")
+# devtools::install_github("ablikimeli/OmniSciKit")
 ```
 
 ## 📋 主要功能模块
