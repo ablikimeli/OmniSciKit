@@ -20,14 +20,14 @@ Imports:
     stats,
     utils,
     graphics,
-    grDevices
-Suggests:
+    grDevices,
     ggplot2,
     survival,
-    knitr,
-    rmarkdown,
     tidyr,
     dplyr
+Suggests:
+    knitr,
+    rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/ablikimeli/OmniSciKit
 BugReports: https://github.com/ablikimeli/OmniSciKit/issues
