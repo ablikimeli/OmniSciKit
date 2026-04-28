@@ -56,7 +56,7 @@ plot_km_curve <- function(time, status, group = NULL,
 
     if (conf_int) {
       p <- p + ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper),
-                                     alpha = 0.2, color = NA)
+                                     alpha = 0.2, color = NA, na.rm = TRUE)
     }
   } else {
     km <- calculate_km_for_plot(time, status)
@@ -72,7 +72,7 @@ plot_km_curve <- function(time, status, group = NULL,
 
     if (conf_int) {
       p <- p + ggplot2::geom_ribbon(ggplot2::aes(ymin = lower, ymax = upper),
-                                     alpha = 0.2, fill = "steelblue")
+                                     alpha = 0.2, fill = "steelblue", na.rm = TRUE)
     }
   }
 

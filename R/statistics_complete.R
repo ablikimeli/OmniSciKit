@@ -385,7 +385,10 @@ hazard_ratio <- function(time, status, group) {
 
   groups <- levels(group)
   if (length(groups) != 2) {
-    stop("Hazard ratio requires exactly 2 groups")
+    stop("Hazard ratio requires exactly 2 groups. Found ", length(groups),
+         " levels (", paste(groups, collapse = ", "),
+         "). Please create a binary group variable first, e.g.:
+  hr <- hazard_ratio(time, status, group == '治疗组')")
   }
 
   g1_idx <- group == groups[1]

@@ -41,7 +41,9 @@ ss_ttest_one_sample <- function(mu0, mu1, sd, power = 0.8, alpha = 0.05,
     power = power,
     alpha = alpha,
     alternative = alternative,
-    method = "One-sample t-test"
+    method = "One-sample t-test",
+    formula = "n = (Z_{α/2} + Z_β)² × σ² / δ²",
+    reference = "Chow et al. (2017) Sample Size Calculations in Clinical Research, 3rd ed."
   ), class = "omni_sample_size")
 }
 
@@ -75,7 +77,9 @@ ss_ttest_paired <- function(delta, sd_diff, power = 0.8, alpha = 0.05,
     power = power,
     alpha = alpha,
     alternative = alternative,
-    method = "Paired t-test"
+    method = "Paired t-test",
+    formula = "n = (Z_{α/2} + Z_β)² × σ²_d / δ²",
+    reference = "Chow et al. (2017) Sample Size Calculations in Clinical Research, 3rd ed."
   ), class = "omni_sample_size")
 }
 
@@ -113,7 +117,9 @@ ss_ttest_welch <- function(delta, sd1, sd2, ratio = 1, power = 0.8, alpha = 0.05
     ratio = ratio,
     power = power,
     alpha = alpha,
-    method = "Welch's t-test"
+    method = "Welch's t-test",
+    formula = "n₁ = (Z_{α/2} + Z_β)² × (σ₁² + σ₂²/ρ) / δ²",
+    reference = "Chow et al. (2017) Sample Size Calculations in Clinical Research, 3rd ed."
   ), class = "omni_sample_size")
 }
 
@@ -144,7 +150,9 @@ ss_mann_whitney <- function(p, power = 0.8, alpha = 0.05) {
     omega = omega,
     power = power,
     alpha = alpha,
-    method = "Mann-Whitney U test"
+    method = "Mann-Whitney U test",
+    formula = "n = (Z_{α/2} + Z_β)² / (12 × ω²), ω = p - 0.5",
+    reference = "Noether (1987) JASA, 82(398), 645-647"
   ), class = "omni_sample_size")
 }
 
@@ -176,7 +184,9 @@ ss_mcnemar <- function(p12, p21, power = 0.8, alpha = 0.05) {
     discordant = pd,
     power = power,
     alpha = alpha,
-    method = "McNemar's test"
+    method = "McNemar's test",
+    formula = "n = (Z_{α/2}√p_d + Z_β√(p_d-(p₁₂-p₂₁)²))² / (p₁₂-p₂₁)²",
+    reference = "Connor (1987) Biometrics, 43(1), 207-211"
   ), class = "omni_sample_size")
 }
 
@@ -231,7 +241,9 @@ ss_noninferiority_mean <- function(margin, sd, true_diff = 0,
     ratio = ratio,
     power = power,
     alpha = alpha,
-    method = "Non-inferiority test (means)"
+    method = "Non-inferiority test (means)",
+    formula = "n₁ = (Z_α + Z_β)² × σ² × (1+1/ρ) / (δ - |μ_diff|)²",
+    reference = "Chow et al. (2017) Ch.4: Non-inferiority Trials"
   ), class = "omni_sample_size")
 }
 
@@ -285,7 +297,9 @@ ss_noninferiority_prop <- function(p_control, margin, p_test = NULL,
     ratio = ratio,
     power = power,
     alpha = alpha,
-    method = "Non-inferiority test (proportions)"
+    method = "Non-inferiority test (proportions)",
+    formula = "n₁ = (Z_α√(p̄(1-p̄)(1+1/ρ)) + Z_β√(p_c(1-p_c)+p_t(1-p_t)/ρ))² / δ²_eff",
+    reference = "Farrington & Manning (1990) Statistics in Medicine, 9(12), 1447-1454"
   ), class = "omni_sample_size")
 }
 
@@ -324,7 +338,9 @@ ss_noninferiority_survival <- function(hr_margin, hr_expected = 1.0,
     p_event = p_event,
     power = power,
     alpha = alpha,
-    method = "Non-inferiority test (survival)"
+    method = "Non-inferiority test (survival)",
+    formula = "d = (Z_α + Z_β)² / (log(δ) - log(HR_e))², n = d / p(events)",
+    reference = "Chow et al. (2017) Ch.4: Non-inferiority Survival Trials"
   ), class = "omni_sample_size")
 }
 
@@ -377,7 +393,9 @@ ss_equivalence_mean <- function(delta, sd, true_diff = 0,
     ratio = ratio,
     power = power,
     alpha = alpha,
-    method = "Equivalence test (means)"
+    method = "Equivalence test (means)",
+    formula = "n₁ = (Z_α + Z_β)² × σ² × (1+1/ρ) / (δ - |μ_diff|)² (TOST)",
+    reference = "Chow et al. (2017) Ch.5: Equivalence Trials"
   ), class = "omni_sample_size")
 }
 
@@ -420,7 +438,9 @@ ss_equivalence_prop <- function(p1, p2, delta, power = 0.8, alpha = 0.05) {
     effective_diff = eff_diff,
     power = power,
     alpha = alpha,
-    method = "Equivalence test (proportions)"
+    method = "Equivalence test (proportions)",
+    formula = "n = (Z_α + Z_β)² × 2p̄(1-p̄) / (δ - |p₁-p₂|)²",
+    reference = "Chow et al. (2017) Ch.5: Equivalence Trials"
   ), class = "omni_sample_size")
 }
 
@@ -462,7 +482,9 @@ ss_equivalence_ratio <- function(theta, delta = log(1.25), cv,
     sigma_log = sigma,
     power = power,
     alpha = alpha,
-    method = "Equivalence test (ratio of means, 2x2 crossover)"
+    method = "Equivalence test (ratio of means, 2x2 crossover)",
+    formula = "n_seq = (Z_α + Z_β)² × σ² / (δ - |log(θ)|)², σ² = log(1+CV²)",
+    reference = "Chow et al. (2017) Ch.8: Bioequivalence Studies"
   ), class = "omni_sample_size")
 }
 
@@ -511,7 +533,9 @@ ss_superiority_mean <- function(delta, sd, true_diff,
     ratio = ratio,
     power = power,
     alpha = alpha,
-    method = "Superiority test (means)"
+    method = "Superiority test (means)",
+    formula = "n₁ = (Z_{α/2} + Z_β)² × σ² × (1+1/ρ) / (μ_diff - δ)²",
+    reference = "Chow et al. (2017) Ch.3: Superiority Trials"
   ), class = "omni_sample_size")
 }
 
@@ -556,7 +580,9 @@ ss_superiority_prop <- function(p_control, p_test, delta,
     effective_diff = eff_diff,
     power = power,
     alpha = alpha,
-    method = "Superiority test (proportions)"
+    method = "Superiority test (proportions)",
+    formula = "n = (Z_{α/2}√(2p̄(1-p̄)) + Z_β√(p₁(1-p₁)+p₂(1-p₂)))² / ((p₂-p₁)-δ)²",
+    reference = "Chow et al. (2017) Ch.3: Superiority Trials"
   ), class = "omni_sample_size")
 }
 
@@ -623,7 +649,9 @@ ss_survival_logrank <- function(hr, p_t = 0.5, median_control = NULL,
     follow_up = follow_up,
     power = power,
     alpha = alpha,
-    method = "Log-rank test (survival)"
+    method = "Log-rank test (survival)",
+    formula = "d = (Z_{α/2} + Z_β)² / (π(1-π)(log(HR))²)",
+    reference = "Freedman (1982) Statistics in Medicine, 1(2), 121-129"
   ), class = "omni_sample_size")
 }
 
@@ -660,7 +688,9 @@ ss_cox_regression <- function(hr, r2 = 0, p_event = 0.5,
     r2 = r2,
     power = power,
     alpha = alpha,
-    method = "Cox regression"
+    method = "Cox regression",
+    formula = "d = (Z_{α/2} + Z_β)² / ((1-R²)π(1-π)(log(HR))²)",
+    reference = "Hsieh & Lavori (2000) Controlled Clinical Trials, 21(6), 552-560"
   ), class = "omni_sample_size")
 }
 
@@ -703,7 +733,9 @@ ss_linear_regression <- function(r2_squared, r2_reduced = 0, n_predictors = 1,
     n_predictors = n_predictors,
     power = power,
     alpha = alpha,
-    method = "Linear regression"
+    method = "Linear regression",
+    formula = "n = (Z_{α/2} + Z_β)² / f² + m + 1, f² = ΔR²/(1-R²)",
+    reference = "Cohen (1988) Statistical Power Analysis, 2nd ed."
   ), class = "omni_sample_size")
 }
 
@@ -741,7 +773,9 @@ ss_logistic_regression <- function(p, or, r2 = 0,
     r2 = r2,
     power = power,
     alpha = alpha,
-    method = "Logistic regression"
+    method = "Logistic regression",
+    formula = "n = (Z_{α/2} + Z_β)² / ((1-R²) × p(1-p) × (log(OR))²)",
+    reference = "Hsieh, Bloch & Larsen (1998) Statistics in Medicine, 17(14), 1623-1634"
   ), class = "omni_sample_size")
 }
 
@@ -774,7 +808,9 @@ ss_poisson_regression <- function(lambda0, rr, exposure = 1,
     exposure = exposure,
     power = power,
     alpha = alpha,
-    method = "Poisson regression"
+    method = "Poisson regression",
+    formula = "n = (Z_{α/2} + Z_β)² × (1/(λ₀E) + 1/(λ₀·rr·E)) / (log(rr))²",
+    reference = "Signorini (1991) Biometrika, 78(2), 446-450"
   ), class = "omni_sample_size")
 }
 
@@ -817,7 +853,9 @@ ss_crossover <- function(delta, sd_within, power = 0.8,
     power = power,
     alpha = alpha,
     alternative = alternative,
-    method = "2x2 Crossover design"
+    method = "2x2 Crossover design",
+    formula = "n = (Z_{α/2} + Z_β)² × σ²_w / δ²",
+    reference = "Chow et al. (2017) Ch.8: Crossover Designs"
   ), class = "omni_sample_size")
 }
 
@@ -864,7 +902,9 @@ ss_group_sequential <- function(delta, sd, n_interim = 1,
     sd = sd,
     power = power,
     alpha = alpha,
-    method = "Group sequential design"
+    method = "Group sequential design",
+    formula = "n_GS = n_fixed × IF, IF = 1+0.1×log(K+1) (OBF) or 1+0.3×log(K+1) (Pocock)",
+    reference = "Jennison & Turnbull (2000) Group Sequential Methods"
   ), class = "omni_sample_size")
 }
 
@@ -902,7 +942,9 @@ ss_repeated_measures <- function(delta, sd_within, n_timepoints,
     corr = corr,
     power = power,
     alpha = alpha,
-    method = "Repeated measures ANOVA"
+    method = "Repeated measures ANOVA",
+    formula = "n = (Z_{α/2} + Z_β)² × 2σ²(1-ρ) / δ²",
+    reference = "Chow et al. (2017) Ch.6: Repeated Measures"
   ), class = "omni_sample_size")
 }
 
@@ -949,7 +991,9 @@ ss_cluster_randomized <- function(delta, sd, icc, cluster_size,
     delta = delta,
     power = power,
     alpha = alpha,
-    method = "Cluster randomized trial"
+    method = "Cluster randomized trial",
+    formula = "n_clusters = n_ind × DE / m, DE = 1+(m-1)×ICC",
+    reference = "Donner & Klar (2000) Design and Analysis of Cluster Randomization Trials"
   ), class = "omni_sample_size")
 }
 
@@ -985,7 +1029,9 @@ ss_multiple_comparisons <- function(k, delta, sd,
     delta = delta,
     sd = sd,
     power = power,
-    method = "Multiple comparisons (Bonferroni)"
+    method = "Multiple comparisons (Bonferroni)",
+    formula = "α_adj = α/k, then standard formula with α_adj",
+    reference = "Cohen (1988) Statistical Power Analysis, 2nd ed."
   ), class = "omni_sample_size")
 }
 
@@ -1030,7 +1076,9 @@ ss_prediction_binary <- function(prevalence, cstatistic, parameters,
     cstatistic = cstatistic,
     parameters = parameters,
     shrinkage = shrinkage,
-    method = "Clinical prediction model (binary)"
+    method = "Clinical prediction model (binary)",
+    formula = "Riley's three-criteria: shrinkage, absolute risk, c-statistic",
+    reference = "Riley et al. (2020) BMJ, 368, m441"
   ), class = "omni_sample_size")
 }
 
@@ -1059,7 +1107,9 @@ ss_prediction_continuous <- function(r2, parameters, shrinkage = 0.9) {
     r2 = r2,
     parameters = parameters,
     shrinkage = shrinkage,
-    method = "Clinical prediction model (continuous)"
+    method = "Clinical prediction model (continuous)",
+    formula = "Riley's method: n = max(n_shrinkage, n_r2, n_min)",
+    reference = "Riley et al. (2020) BMJ, 368, m441"
   ), class = "omni_sample_size")
 }
 
@@ -1090,7 +1140,9 @@ ss_prediction_survival <- function(cstatistic, parameters, p_cens = 0.5,
     parameters = parameters,
     p_cens = p_cens,
     shrinkage = shrinkage,
-    method = "Clinical prediction model (survival)"
+    method = "Clinical prediction model (survival)",
+    formula = "Events needed = m × 10 / (1 - p_cens), n = events / (1-p_cens)",
+    reference = "Riley et al. (2020) BMJ, 368, m441"
   ), class = "omni_sample_size")
 }
 
@@ -1117,7 +1169,9 @@ ss_diagnostic_sens <- function(sens, w = 0.05, alpha = 0.05) {
     sens = sens,
     w = w,
     alpha = alpha,
-    method = "Diagnostic test (sensitivity)"
+    method = "Diagnostic test (sensitivity)",
+    formula = "n = Z_{α/2}² × sens × (1-sens) / w²",
+    reference = "Buderer (1996) Academic Emergency Medicine, 3(9), 895-900"
   ), class = "omni_sample_size")
 }
 
@@ -1140,7 +1194,9 @@ ss_diagnostic_spec <- function(spec, w = 0.05, alpha = 0.05) {
     spec = spec,
     w = w,
     alpha = alpha,
-    method = "Diagnostic test (specificity)"
+    method = "Diagnostic test (specificity)",
+    formula = "n = Z_{α/2}² × spec × (1-spec) / w²",
+    reference = "Buderer (1996) Academic Emergency Medicine, 3(9), 895-900"
   ), class = "omni_sample_size")
 }
 
@@ -1175,7 +1231,9 @@ ss_diagnostic_auc <- function(auc, ratio = 1, power = 0.8, alpha = 0.05) {
     ratio = ratio,
     power = power,
     alpha = alpha,
-    method = "Diagnostic test (AUC)"
+    method = "Diagnostic test (AUC)",
+    formula = "Hanley-McNeil method: n_pos = (Z_{α/2}√Q₁ + Z_β√Q₂)² / (AUC-0.5)²",
+    reference = "Hanley & McNeil (1982) Radiology, 143(1), 29-36"
   ), class = "omni_sample_size")
 }
 
@@ -1204,7 +1262,9 @@ ss_precision <- function(sd, width, conf_level = 0.95) {
     sd = sd,
     width = width,
     conf_level = conf_level,
-    method = "Precision-based sample size"
+    method = "Precision-based sample size",
+    formula = "n = (2 × Z_{α/2} × σ / w)²",
+    reference = "Bland (2000) An Introduction to Medical Statistics, 3rd ed."
   ), class = "omni_sample_size")
 }
 
@@ -1229,6 +1289,8 @@ ss_precision_prop <- function(p, width, conf_level = 0.95) {
     p = p,
     width = width,
     conf_level = conf_level,
-    method = "Precision-based sample size (proportion)"
+    method = "Precision-based sample size (proportion)",
+    formula = "n = 4 × Z_{α/2}² × p(1-p) / w²",
+    reference = "Bland (2000) An Introduction to Medical Statistics, 3rd ed."
   ), class = "omni_sample_size")
 }

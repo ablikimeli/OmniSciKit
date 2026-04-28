@@ -596,7 +596,9 @@ ss_ttest <- function(delta, sd, ratio = 1, power = 0.8, alpha = 0.05) {
     ratio = ratio,
     power = power,
     alpha = alpha,
-    method = "Two-sample t-test (equal variances)"
+    method = "Two-sample t-test (equal variances)",
+    formula = "n₁ = (Z_{α/2} + Z_β)² × σ² × (1+1/ρ) / δ²",
+    reference = "Chow et al. (2017) Sample Size Calculations in Clinical Research, 3rd ed."
   ), class = "omni_sample_size")
 }
 
@@ -625,7 +627,9 @@ ss_anova <- function(k, f, power = 0.8, alpha = 0.05) {
     f = f,
     power = power,
     alpha = alpha,
-    method = "One-way ANOVA"
+    method = "One-way ANOVA",
+    formula = "n = (Z_{α/2} + Z_β)² / f²",
+    reference = "Cohen (1988) Statistical Power Analysis, 2nd ed."
   ), class = "omni_sample_size")
 }
 
@@ -658,7 +662,9 @@ ss_correlation <- function(r, power = 0.8, alpha = 0.05,
     power = power,
     alpha = alpha,
     alternative = alternative,
-    method = "Correlation test"
+    method = "Correlation test",
+    formula = "n = (Z_{α/2} + Z_β)² / z(r)² + 3, z(r) = 0.5×log((1+r)/(1-r))",
+    reference = "Cohen (1988) Statistical Power Analysis, 2nd ed."
   ), class = "omni_sample_size")
 }
 
@@ -697,7 +703,9 @@ ss_proportion <- function(p1, p2, power = 0.8, alpha = 0.05,
     p2 = p2,
     power = power,
     alpha = alpha,
-    method = "Two proportions test"
+    method = "Two proportions test",
+    formula = "n = (Z_{α/2}√(2p̄(1-p̄)) + Z_β√(p₁(1-p₁)+p₂(1-p₂)))² / (p₁-p₂)²",
+    reference = "Chow et al. (2017) Sample Size Calculations in Clinical Research, 3rd ed."
   ), class = "omni_sample_size")
 }
 
@@ -724,7 +732,9 @@ ss_chisq <- function(w, df = 1, power = 0.8, alpha = 0.05) {
     df = df,
     power = power,
     alpha = alpha,
-    method = "Chi-square test"
+    method = "Chi-square test",
+    formula = "n = (Z_{α/2} + Z_β)² / w²",
+    reference = "Cohen (1988) Statistical Power Analysis, 2nd ed."
   ), class = "omni_sample_size")
 }
 
@@ -763,7 +773,9 @@ ss_diagnostic <- function(sens, spec, prev, w = 0.05, alpha = 0.05) {
     spec = spec,
     w = w,
     alpha = alpha,
-    method = "Diagnostic test"
+    method = "Diagnostic test",
+    formula = "n_disease = Z² × sens × (1-sens) / w², n_healthy = Z² × spec × (1-spec) / w²",
+    reference = "Buderer (1996) Academic Emergency Medicine, 3(9), 895-900"
   ), class = "omni_sample_size")
 }
 

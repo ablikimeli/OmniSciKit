@@ -212,7 +212,9 @@ fwer_control <- function(p_values, alpha = 0.05) {
     adjusted = adj_p,
     significant = adj_p < alpha,
     alpha = alpha,
-    method = "Holm-Bonferroni"
+    method = "Holm-Bonferroni",
+    formula = "Holm-Bonferroni: α_adj(k) = α / (n - k + 1)",
+    reference = "Holm (1979) Scandinavian Journal of Statistics, 6(2), 65-70"
   ), class = "omni_stats")
 }
 
@@ -269,6 +271,13 @@ bootstrap_ci <- function(data, statistic = mean, n_bootstrap = 1000,
 #' }
 #' @export
 bootstrap_regression <- function(formula, data, n_bootstrap = 1000) {
+  if (missing(formula) || missing(data)) {
+    stop("Both 'formula' and 'data' arguments are required.
+Usage: bootstrap_regression(y ~ x1 + x2, data = your_data)")
+  }
+  if (!inherits(data, "data.frame")) {
+    stop("'data' must be a data.frame, not ", deparse(substitute(data)))
+  }
   fit <- lm(formula, data = data)
   coef_names <- names(coef(fit))
   n_coef <- length(coef_names)
@@ -434,7 +443,9 @@ adjust_alpha <- function(alpha, k, method = "bonferroni") {
     alpha_original = alpha,
     alpha_adjusted = alpha_adj,
     k = k,
-    method = method
+    method = method,
+    formula = if (method == "bonferroni") "α_adj = α / k" else "α_adj = 1 - (1-α)^(1/k)",
+    reference = "Bonferroni (1936) or Šidák (1967) multiple comparison correction"
   ), class = "omni_stats")
 }
 

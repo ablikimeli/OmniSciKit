@@ -40,6 +40,11 @@ print.omni_sample_size <- function(x, ...) {
   }
   if (!is.null(x$power)) cat("Power:", x$power, "\n")
   if (!is.null(x$alpha)) cat("Alpha:", x$alpha, "\n")
+
+  # Formula and reference
+  if (!is.null(x$formula)) cat("\nFormula:", x$formula, "\n")
+  if (!is.null(x$reference)) cat("Reference:", x$reference, "\n")
+
   invisible(x)
 }
 
@@ -103,6 +108,11 @@ print.omni_stats <- function(x, ...) {
   # Survival
   if (!is.null(x$groups)) cat("Groups:", length(x$groups), "\n")
 
+  # Alpha adjustment
+  if (!is.null(x$alpha_original)) cat("Original alpha:", x$alpha_original, "\n")
+  if (!is.null(x$alpha_adjusted)) cat("Adjusted alpha:", round(x$alpha_adjusted, 6), "\n")
+  if (!is.null(x$k)) cat("Number of comparisons:", x$k, "\n")
+
   # Coefficients table for regression
   if (!is.null(x$coefficients) && is.data.frame(x$coefficients)) {
     cat("\nCoefficients:\n")
@@ -114,6 +124,10 @@ print.omni_stats <- function(x, ...) {
     cat("\n")
     print(x$table)
   }
+
+  # Formula and reference
+  if (!is.null(x$formula)) cat("\nFormula:", x$formula, "\n")
+  if (!is.null(x$reference)) cat("Reference:", x$reference, "\n")
 
   invisible(x)
 }
@@ -197,6 +211,11 @@ print.omni_roc <- function(x, ...) {
   else                   interp <- "Fail"
 
   cat("Interpretation:", interp, "\n")
+
+  if (!is.null(x$plot)) {
+    plot(x$plot)
+  }
+
   invisible(x)
 }
 
