@@ -1,0 +1,22 @@
+# R package
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+src/*.o
+src/*.so
+src/*.dll
+*.log
+*.aux
+*.tex
+*.pdf
+*.tiff
+
+# Build artifacts
+*.tar.gz
+*.Rcheck/
+
+# IDE
+.DS_Store
+Thumbs.db

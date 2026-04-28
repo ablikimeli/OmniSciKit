@@ -1,0 +1,15 @@
+citHeader("To cite OmniSciKit in publications use:")
+
+citEntry(
+  entry = "Manual",
+  title        = "OmniSciKit: Comprehensive Clinical Statistical Toolkit",
+  author       = personList(as.person("Ablikim Ali")),
+  year         = 2025,
+  note         = "R package version 0.2.0",
+  url          = "https://github.com/ablikimeli/OmniSciKit",
+
+  textVersion  = paste("Ali, A. (2025).",
+                       "OmniSciKit: Comprehensive Clinical Statistical Toolkit.",
+                       "R package version 0.2.0.",
+                       "https://github.com/ablikimeli/OmniSciKit")
+)

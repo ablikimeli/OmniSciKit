@@ -1,0 +1,11 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^build_complete\.R$
+^build_enhanced\.R$
+^build_package\.R$
+^doc_log\.txt$
+^doc_out\.txt$
+^debug_.*\.R$
+^test_.*\.R$
+^\.git$
+^\.gitignore$

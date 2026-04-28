@@ -1,0 +1,370 @@
+---
+title: "OmniSciKit 介绍与使用指南"
+author: "Ablikim Ali"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{OmniSciKit Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+# OmniSciKit 简介
+
+`OmniSciKit` 是一个全面的临床研究和生物统计R包，提供样本量计算、功效分析、统计分析、数据可视化和临床工具。本 vignette 将展示包的主要功能和使用方法。
+
+## 安装
+
+```{r, eval = FALSE}
+# 从GitHub安装
+devtools::install_github("ablikimeli/OmniSciKit")
+
+# 或从本地安装
+install.packages("OmniSciKit_0.2.0.tar.gz", repos = NULL, type = "source")
+```
+
+## 加载包与数据
+
+```{r, message=FALSE}
+library(OmniSciKit)
+data(omni_glucose)
+data(omni_cancer)
+data(omni_diagnostic)
+```
+
+# 1. 样本量计算
+
+## 1.1 单样本t检验
+
+```{r}
+ss_ttest_one_sample(mu0 = 100, mu1 = 105, sd = 15)
+```
+
+## 1.2 配对t检验
+
+```{r}
+ss_ttest_paired(delta = 5, sd_diff = 10)
+```
+
+## 1.3 非劣效性试验（均数）
+
+```{r}
+ss_noninferiority_mean(margin = 3, sd = 8)
+```
+
+## 1.4 非劣效性试验（率）
+
+```{r}
+ss_noninferiority_prop(p_control = 0.8, margin = 0.1)
+```
+
+## 1.5 等效性试验（TOST）
+
+```{r}
+ss_equivalence_mean(delta = 5, sd = 10)
+```
+
+## 1.6 生物等效性（比例）
+
+```{r}
+ss_equivalence_ratio(theta = 0.95, cv = 0.2)
+```
+
+## 1.7 生存分析样本量
+
+```{r}
+ss_survival_logrank(hr = 0.7, median_control = 12, accrual = 12, follow_up = 18)
+```
+
+## 1.8 Cox回归样本量
+
+```{r}
+ss_cox_regression(hr = 2.0, p_event = 0.3)
+```
+
+## 1.9 Logistic回归样本量
+
+```{r}
+ss_logistic_regression(p = 0.2, or = 2.0)
+```
+
+## 1.10 整群随机试验
+
+```{r}
+ss_cluster_randomized(delta = 0.5, sd = 1, icc = 0.05, cluster_size = 20)
+```
+
+## 1.11 临床预测模型样本量
+
+```{r}
+ss_prediction_binary(prevalence = 0.3, cstatistic = 0.75, parameters = 10)
+```
+
+## 1.12 诊断试验样本量
+
+```{r}
+ss_diagnostic_auc(auc = 0.8, ratio = 1)
+```
+
+## 1.13 脱落率调整
+
+```{r}
+adjust_dropout(n = 100, dropout_rate = 0.2)
+```
+
+# 2. 功效分析
+
+## 2.1 t检验功效
+
+```{r}
+power_ttest(n = 64, delta = 0.5, sd = 1)
+```
+
+## 2.2 功效曲线
+
+```{r, fig.show=TRUE}
+plot_power_curve(n_range = seq(10, 200, by = 10), effect_size = 0.5)
+```
+
+## 2.3 效应量与功效曲线
+
+```{r, fig.show=TRUE}
+plot_effect_size_curve(effect_range = seq(0.1, 1, by = 0.1), n = 100)
+```
+
+# 3. 统计分析
+
+## 3.1 两样本t检验
+
+```{r}
+g1 <- omni_glucose$hba1c_3m[omni_glucose$treatment == "Drug"]
+g2 <- omni_glucose$hba1c_3m[omni_glucose$treatment == "Placebo"]
+stats_ttest(g1, g2)
+```
+
+## 3.2 Wilcoxon秩和检验
+
+```{r}
+stats_wilcoxon(g1, g2)
+```
+
+## 3.3 ANOVA
+
+```{r}
+stats_anova(omni_glucose$hba1c_3m, omni_glucose$treatment)
+```
+
+## 3.4 相关分析
+
+```{r}
+stats_correlation(omni_glucose$age, omni_glucose$bmi)
+```
+
+## 3.5 线性回归
+
+```{r}
+stats_regression(hba1c_3m ~ age + bmi, data = omni_glucose)
+```
+
+## 3.6 Logistic回归
+
+```{r}
+omni_glucose$poor_control <- ifelse(omni_glucose$hba1c_3m > 7, 1, 0)
+stats_logistic_regression(poor_control ~ age + bmi, data = omni_glucose)
+```
+
+## 3.7 卡方检验
+
+```{r}
+stats_chisq(omni_glucose$treatment, omni_glucose$complications)
+```
+
+## 3.8 正态性检验
+
+```{r}
+stats_normality(omni_glucose$hba1c_3m)
+```
+
+## 3.9 Kaplan-Meier生存分析
+
+```{r}
+stats_km_survival(omni_cancer$time, omni_cancer$status, omni_cancer$treatment)
+```
+
+## 3.10 Log-rank检验
+
+```{r}
+stats_logrank_test(omni_cancer$time, omni_cancer$status, omni_cancer$treatment)
+```
+
+## 3.11 Fisher精确检验
+
+```{r}
+stats_fisher_exact(omni_glucose$gender, omni_glucose$complications)
+```
+
+# 4. 效应量
+
+## 4.1 Cohen's d
+
+```{r}
+cohen_d(g1, g2)
+```
+
+## 4.2 比值比 (OR)
+
+```{r}
+odds_ratio(a = 30, b = 20, c = 15, d = 35)
+```
+
+## 4.3 相对危险度 (RR)
+
+```{r}
+relative_risk(a = 30, b = 50, c = 15, d = 50)
+```
+
+## 4.4 风险比 (HR)
+
+```{r}
+hazard_ratio(omni_cancer$time, omni_cancer$status, omni_cancer$treatment)
+```
+
+# 5. 可视化
+
+## 5.1 Kaplan-Meier生存曲线
+
+```{r, fig.show=TRUE}
+plot_km_curve(omni_cancer$time, omni_cancer$status, omni_cancer$treatment,
+              title = "Cancer Survival by Treatment")
+```
+
+## 5.2 ROC曲线
+
+```{r, fig.show=TRUE}
+disease_binary <- ifelse(omni_diagnostic$true_disease == "阳性", 1, 0)
+plot_roc_enhanced(omni_diagnostic$test1_result, disease_binary)
+```
+
+## 5.3 箱线图
+
+```{r, fig.show=TRUE}
+plot_boxplot(omni_glucose$treatment, omni_glucose$hba1c_3m,
+             title = "HbA1c by Treatment Group")
+```
+
+## 5.4 散点图
+
+```{r, fig.show=TRUE}
+plot_scatter(omni_glucose$age, omni_glucose$hba1c_3m,
+             title = "Age vs HbA1c")
+```
+
+## 5.5 相关矩阵热图
+
+```{r, fig.show=TRUE}
+plot_correlation_matrix(omni_glucose[, c("age", "bmi", "hba1c_3m", "hba1c_baseline")])
+```
+
+## 5.6 火山图
+
+```{r, fig.show=TRUE}
+set.seed(123)
+fc <- rnorm(100, 0, 2)
+p <- runif(100, 0, 1)
+plot_volcano(fc, p, title = "Example Volcano Plot")
+```
+
+## 5.7 森林图（Meta分析）
+
+```{r, fig.show=TRUE}
+plot_forest_meta(
+  studies = c("Study A", "Study B", "Study C"),
+  effects = c(-0.5, -0.3, -0.7),
+  se = c(0.2, 0.15, 0.25)
+)
+```
+
+## 5.8 Bland-Altman图
+
+```{r, fig.show=TRUE, eval=FALSE}
+# m1 <- rnorm(100, 100, 10)
+# m2 <- m1 + rnorm(100, 0, 5)
+# plot_bland_altman(m1, m2)
+```
+
+# 6. 诊断试验
+
+```{r}
+diag_test_performance(omni_diagnostic$test1_result, omni_diagnostic$true_disease)
+```
+
+# 7. Table One 基线特征表
+
+```{r}
+table_one(omni_glucose,
+          vars = c("age", "bmi", "hba1c_3m", "hba1c_baseline",
+                   "gender", "complications"),
+          group = "treatment")
+```
+
+# 8. 临床工具
+
+```{r}
+calculate_bmi(weight = 70, height = 1.75)
+calculate_egfr(creatinine = 1.2, age = 50, sex = "male")
+```
+
+# 9. 工具函数
+
+## 9.1 描述统计
+
+```{r}
+summary_stats(omni_glucose$hba1c_3m)
+```
+
+## 9.2 缺失值填补
+
+```{r}
+test_data <- omni_glucose
+test_data$age[1:5] <- NA
+imputed <- impute_missing(test_data, method = "median")
+sum(is.na(imputed$age))
+```
+
+## 9.3 多重比较校正
+
+```{r}
+p <- c(0.01, 0.03, 0.05, 0.1, 0.2)
+multiple_testing_correction(p, method = "fdr")
+```
+
+## 9.4 Bootstrap置信区间
+
+```{r}
+bootstrap_ci(omni_glucose$hba1c_3m, mean, n_bootstrap = 500)
+```
+
+# 10. 统计假设检验
+
+```{r}
+check_assumptions(omni_glucose$hba1c_3m, "ttest",
+                  group = omni_glucose$treatment)
+```
+
+# 参考文献
+
+- Chow, S.C., Shao, J., Wang, H., & Lokhnygina, Y. (2017). *Sample Size Calculations in Clinical Research* (3rd ed.). Chapman and Hall/CRC.
+- Cohen, J. (1988). *Statistical Power Analysis for the Behavioral Sciences* (2nd ed.). Lawrence Erlbaum Associates.
+- Riley, R.D., et al. (2020). Calculating the sample size required for developing a clinical prediction model. *BMJ*, 368, m441.
+- Hsieh, F.Y., Bloch, D.A., & Larsen, M.D. (1998). A simple method of sample size calculation for linear and logistic regression. *Statistics in Medicine*, 17(14), 1623-1634.
+- Farrington, C.P., & Manning, G. (1990). Test statistics and sample size formulae for comparative binomial trials with null hypothesis of non-zero risk difference or non-unity relative risk. *Statistics in Medicine*, 9(12), 1447-1454.
+- Schoenfeld, D.A. (1983). Sample-size formula for the proportional-hazards regression model. *Biometrics*, 39(2), 499-503.

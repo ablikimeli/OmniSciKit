@@ -1,0 +1,33 @@
+Package: OmniSciKit
+Type: Package
+Title: Comprehensive Clinical Statistical Toolkit
+Version: 0.2.0
+Authors@R: person("Ablikim", "Ali", email = "medical_stat@163.com",
+                  role = c("aut", "cre"))
+Description: A comprehensive R package for clinical research and biostatistics.
+    Integrates sample size calculation, statistical analysis, data visualization,
+    power analysis, effect size calculation, clinical prediction model sample size,
+    and clinical tools. Includes 8 real clinical datasets for demonstration and practice.
+    Covers superiority, non-inferiority, and equivalence trial designs,
+    survival analysis, regression models, and diagnostic test evaluation.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.3
+Depends:
+    R (>= 4.0.0)
+Imports:
+    stats,
+    utils,
+    graphics,
+    grDevices
+Suggests:
+    ggplot2,
+    survival,
+    knitr,
+    rmarkdown,
+    tidyr,
+    dplyr
+VignetteBuilder: knitr
+URL: https://github.com/ablikimeli/OmniSciKit
+BugReports: https://github.com/ablikimeli/OmniSciKit/issues
