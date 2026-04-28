@@ -341,6 +341,7 @@ check_assumptions <- function(data, test = "ttest", group = NULL) {
 
     results <- list(
       test = "t-test",
+      method = "Assumption Check (t-test)",
       normality = normality_tests,
       equal_variance = max_var_ratio < 3,
       variance_ratio = max_var_ratio,
@@ -367,6 +368,7 @@ check_assumptions <- function(data, test = "ttest", group = NULL) {
 
     results <- list(
       test = "ANOVA",
+      method = "Assumption Check (ANOVA)",
       normality = normality_tests,
       equal_variance = max_var_ratio < 3,
       variance_ratio = max_var_ratio,
@@ -382,6 +384,7 @@ check_assumptions <- function(data, test = "ttest", group = NULL) {
     # This would need the model fit, simplified version
     results <- list(
       test = "Regression",
+      method = "Assumption Check (Regression)",
       note = "Use stats_regression() and check residuals"
     )
   }

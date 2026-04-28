@@ -226,15 +226,26 @@ plot_forest_meta <- function(studies, effects, se, subgroups = NULL,
   }
 
   # Add summary row
-  summary_row <- data.frame(
-    study = factor(summary_label, levels = rev(c(studies, summary_label))),
-    effect = summary_effect,
-    lower = summary_ci_lower,
-    upper = summary_ci_upper,
-    se = summary_se,
-    weight = sum(weights),
-    subgroup = if (!is.null(subgroups)) "Summary" else NULL
-  )
+  if (!is.null(subgroups)) {
+    summary_row <- data.frame(
+      study = factor(summary_label, levels = rev(c(studies, summary_label))),
+      effect = summary_effect,
+      lower = summary_ci_lower,
+      upper = summary_ci_upper,
+      se = summary_se,
+      weight = sum(weights),
+      subgroup = "Summary"
+    )
+  } else {
+    summary_row <- data.frame(
+      study = factor(summary_label, levels = rev(c(studies, summary_label))),
+      effect = summary_effect,
+      lower = summary_ci_lower,
+      upper = summary_ci_upper,
+      se = summary_se,
+      weight = sum(weights)
+    )
+  }
 
   plot_data <- rbind(plot_data, summary_row)
 

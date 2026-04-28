@@ -60,7 +60,7 @@ print.omni_stats <- function(x, ...) {
     if (x$p_value < 0.001) cat("P-value: < 0.001\n")
     else cat("P-value:", round(x$p_value, 4), "\n")
   }
-  if (!is.null(x$estimate)) cat("Estimate:", round(as.numeric(x$estimate), 4), "\n")
+  if (!is.null(x[["estimate"]])) cat("Estimate:", round(as.numeric(x[["estimate"]]), 4), "\n")
 
   # Regression
   if (!is.null(x$r_squared)) cat("R-squared:", round(x$r_squared, 4), "\n")
@@ -68,8 +68,8 @@ print.omni_stats <- function(x, ...) {
   if (!is.null(x$f_value)) cat("F-value:", round(x$f_value, 4), "\n")
   if (!is.null(x$converged)) cat("Converged:", x$converged, "\n")
   if (!is.null(x$concordance)) cat("Concordance:", round(x$concordance, 4), "\n")
-  if (!is.null(x$n) && is.null(x$sensitivity)) cat("N:", x$n, "\n")
-  if (!is.null(x$nevent)) cat("Events:", x$nevent, "\n")
+  if (!is.null(x[["n"]]) && is.null(x$sensitivity)) cat("N:", x[["n"]], "\n")
+  if (!is.null(x[["nevent"]])) cat("Events:", x[["nevent"]], "\n")
 
   # Diagnostic test
   if (!is.null(x$sensitivity)) cat("Sensitivity:", round(x$sensitivity, 4), "\n")

@@ -1,8 +1,15 @@
 ---
-title: "OmniSciKit 介绍与使用指南"
+title: "OmniSciKit 使用教程"
 author: "Ablikim Ali"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    theme: flatly
+    highlight: textmate
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    code_folding: show
 vignette: >
   %\VignetteIndexEntry{OmniSciKit Introduction}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,116 +19,184 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = "#",
   fig.width = 7,
-  fig.height = 5
+  fig.height = 4.5,
+  fig.align = "center",
+  warning = FALSE,
+  message = FALSE
 )
 ```
 
-# OmniSciKit 简介
+## 概述
 
-`OmniSciKit` 是一个全面的临床研究和生物统计R包，提供样本量计算、功效分析、统计分析、数据可视化和临床工具。本 vignette 将展示包的主要功能和使用方法。
+**OmniSciKit** 是一个全面的临床研究和生物统计R包，覆盖临床试验样本量计算、功效分析、统计分析、数据可视化、效应量计算、诊断试验评估和临床工具等核心功能。
 
-## 安装
+### 安装
 
 ```{r, eval = FALSE}
-# 从GitHub安装
-devtools::install_github("ablikimeli/OmniSciKit")
-
-# 或从本地安装
-install.packages("OmniSciKit_0.2.0.tar.gz", repos = NULL, type = "source")
+if (!requireNamespace("pak", quietly = TRUE))
+    install.packages("pak")
+pak::pak("ablikimeli/OmniSciKit")
 ```
 
-## 加载包与数据
+### 加载包与数据集
 
-```{r, message=FALSE}
+```{r}
 library(OmniSciKit)
 data(omni_glucose)
 data(omni_cancer)
 data(omni_diagnostic)
+data(omni_cardio)
 ```
+
+内置8个临床数据集：`omni_glucose`（血糖控制，500例）、`omni_cancer`（癌症生存，300例）、`omni_diagnostic`（诊断试验，450例）、`omni_cardio`（心血管风险，400例）等。
+
+---
 
 # 1. 样本量计算
 
+样本量计算是临床试验设计的核心环节，直接决定研究的把握度和伦理合理性。
+
 ## 1.1 单样本t检验
 
+**概念**：检验样本均数是否与已知总体均数存在差异，如比较新治疗组HbA1c是否与目标值100有差异。
+
 ```{r}
-ss_ttest_one_sample(mu0 = 100, mu1 = 105, sd = 15)
+ss_ttest_one_sample(mu0 = 100, mu1 = 105, sd = 15, power = 0.8)
 ```
 
 ## 1.2 配对t检验
+
+**概念**：配对设计如同一患者治疗前后的比较。
 
 ```{r}
 ss_ttest_paired(delta = 5, sd_diff = 10)
 ```
 
-## 1.3 非劣效性试验（均数）
+## 1.3 两样本t检验
+
+```{r}
+ss_ttest(delta = 0.5, sd = 1)
+```
+
+## 1.4 非劣效性试验（均数）
+
+**概念**：验证新疗法不劣于标准疗法，允许一定的临床可接受差异。常用于非劣效 margin 设定。
 
 ```{r}
 ss_noninferiority_mean(margin = 3, sd = 8)
 ```
 
-## 1.4 非劣效性试验（率）
+## 1.5 非劣效性试验（率）
 
 ```{r}
 ss_noninferiority_prop(p_control = 0.8, margin = 0.1)
 ```
 
-## 1.5 等效性试验（TOST）
+## 1.6 等效性试验（TOST）
+
+**概念**：验证两种疗法等效，双向检验。生物等效性研究中常用。
 
 ```{r}
 ss_equivalence_mean(delta = 5, sd = 10)
 ```
 
-## 1.6 生物等效性（比例）
+## 1.7 生物等效性（均数比）
 
 ```{r}
 ss_equivalence_ratio(theta = 0.95, cv = 0.2)
 ```
 
-## 1.7 生存分析样本量
+## 1.8 优效性试验
+
+**概念**：验证新疗法优于标准疗法超过临床意义的阈值。
+
+```{r}
+ss_superiority_mean(delta = 5, sd = 10, true_diff = 8)
+```
+
+## 1.9 生存分析样本量（Log-rank）
+
+**概念**：基于事件驱动设计，需要预估事件数和随访时间。常用于肿瘤临床试验。
 
 ```{r}
 ss_survival_logrank(hr = 0.7, median_control = 12, accrual = 12, follow_up = 18)
 ```
 
-## 1.8 Cox回归样本量
+## 1.10 Cox回归样本量
 
 ```{r}
-ss_cox_regression(hr = 2.0, p_event = 0.3)
+ss_cox_regression(hr = 2.0, r2 = 0, p_event = 0.3)
 ```
 
-## 1.9 Logistic回归样本量
+## 1.11 Logistic回归样本量
 
 ```{r}
 ss_logistic_regression(p = 0.2, or = 2.0)
 ```
 
-## 1.10 整群随机试验
+## 1.12 线性回归样本量
+
+```{r}
+ss_linear_regression(r2_squared = 0.15, n_predictors = 3)
+```
+
+## 1.13 整群随机试验
+
+**概念**：考虑群内相关性（ICC），设计效应 inflation。社区干预试验常用。
 
 ```{r}
 ss_cluster_randomized(delta = 0.5, sd = 1, icc = 0.05, cluster_size = 20)
 ```
 
-## 1.11 临床预测模型样本量
+## 1.14 成组序贯设计
+
+**概念**：允许中期分析，提前终止试验。使用alpha消耗函数控制I类错误。
+
+```{r}
+ss_group_sequential(delta = 0.5, sd = 1, n_interim = 3)
+```
+
+## 1.15 重复测量设计
+
+```{r}
+ss_repeated_measures(delta = 3, sd_within = 5, n_timepoints = 4)
+```
+
+## 1.16 多重比较校正
+
+```{r}
+ss_multiple_comparisons(k = 5, delta = 0.5, sd = 1)
+```
+
+## 1.17 临床预测模型样本量
+
+**概念**：基于Riley三准则（收缩因子、绝对风险、C-statistic）。
 
 ```{r}
 ss_prediction_binary(prevalence = 0.3, cstatistic = 0.75, parameters = 10)
 ```
 
-## 1.12 诊断试验样本量
+## 1.18 诊断试验样本量（AUC）
 
 ```{r}
 ss_diagnostic_auc(auc = 0.8, ratio = 1)
 ```
 
-## 1.13 脱落率调整
+## 1.19 脱落率调整
+
+**概念**：实际入组人数需考虑脱落。如预计20%脱落率：
 
 ```{r}
 adjust_dropout(n = 100, dropout_rate = 0.2)
 ```
 
+---
+
 # 2. 功效分析
+
+功效分析回答"在给定样本量下，有多大概率能发现真实效应"。
 
 ## 2.1 t检验功效
 
@@ -131,33 +206,45 @@ power_ttest(n = 64, delta = 0.5, sd = 1)
 
 ## 2.2 功效曲线
 
-```{r, fig.show=TRUE}
+**概念**：展示样本量与统计功效的关系，辅助确定最优样本量。
+
+```{r}
 plot_power_curve(n_range = seq(10, 200, by = 10), effect_size = 0.5)
 ```
 
 ## 2.3 效应量与功效曲线
 
-```{r, fig.show=TRUE}
-plot_effect_size_curve(effect_range = seq(0.1, 1, by = 0.1), n = 100)
+**概念**：展示效应量大小对统计功效的影响，效应量越大所需样本越小。
+
+```{r}
+plot_effect_size_curve(effect_range = seq(0.1, 1.0, by = 0.1), n = 100)
 ```
+
+---
 
 # 3. 统计分析
 
 ## 3.1 两样本t检验
 
+**案例**：比较胰岛素与口服药治疗后的HbA1c水平。
+
 ```{r}
-g1 <- omni_glucose$hba1c_3m[omni_glucose$treatment == "Drug"]
-g2 <- omni_glucose$hba1c_3m[omni_glucose$treatment == "Placebo"]
-stats_ttest(g1, g2)
+g_insulin <- omni_glucose$hba1c_3m[omni_glucose$treatment == "胰岛素"]
+g_oral <- omni_glucose$hba1c_3m[omni_glucose$treatment == "口服药"]
+stats_ttest(g_insulin, g_oral)
 ```
 
 ## 3.2 Wilcoxon秩和检验
 
+**概念**：非参数检验，适用于数据不满足正态分布的情况。
+
 ```{r}
-stats_wilcoxon(g1, g2)
+stats_wilcoxon(g_insulin, g_oral)
 ```
 
-## 3.3 ANOVA
+## 3.3 单因素方差分析（ANOVA）
+
+**案例**：比较三种治疗方式的HbA1c差异。
 
 ```{r}
 stats_anova(omni_glucose$hba1c_3m, omni_glucose$treatment)
@@ -165,17 +252,23 @@ stats_anova(omni_glucose$hba1c_3m, omni_glucose$treatment)
 
 ## 3.4 相关分析
 
+**案例**：年龄与BMI的Pearson相关性。
+
 ```{r}
 stats_correlation(omni_glucose$age, omni_glucose$bmi)
 ```
 
 ## 3.5 线性回归
 
+**案例**：以HbA1c为因变量，探索年龄、BMI的影响。
+
 ```{r}
 stats_regression(hba1c_3m ~ age + bmi, data = omni_glucose)
 ```
 
 ## 3.6 Logistic回归
+
+**案例**：血糖控制不佳（HbA1c > 7）的危险因素分析。
 
 ```{r}
 omni_glucose$poor_control <- ifelse(omni_glucose$hba1c_3m > 7, 1, 0)
@@ -184,146 +277,232 @@ stats_logistic_regression(poor_control ~ age + bmi, data = omni_glucose)
 
 ## 3.7 卡方检验
 
+**案例**：治疗组与并发症的相关性分析。
+
 ```{r}
 stats_chisq(omni_glucose$treatment, omni_glucose$complications)
 ```
 
-## 3.8 正态性检验
-
-```{r}
-stats_normality(omni_glucose$hba1c_3m)
-```
-
-## 3.9 Kaplan-Meier生存分析
-
-```{r}
-stats_km_survival(omni_cancer$time, omni_cancer$status, omni_cancer$treatment)
-```
-
-## 3.10 Log-rank检验
-
-```{r}
-stats_logrank_test(omni_cancer$time, omni_cancer$status, omni_cancer$treatment)
-```
-
-## 3.11 Fisher精确检验
+## 3.8 Fisher精确检验
 
 ```{r}
 stats_fisher_exact(omni_glucose$gender, omni_glucose$complications)
 ```
 
+## 3.9 正态性检验
+
+```{r}
+stats_normality(omni_glucose$hba1c_3m)
+```
+
+## 3.10 Kaplan-Meier生存分析
+
+**案例**：癌症患者不同治疗的生存估计。
+
+```{r}
+stats_km_survival(omni_cancer$time_to_event, omni_cancer$status, omni_cancer$treatment)
+```
+
+## 3.11 Log-rank检验
+
+**案例**：比较不同治疗组的生存曲线差异。
+
+```{r}
+stats_logrank_test(omni_cancer$time_to_event, omni_cancer$status, omni_cancer$treatment)
+```
+
+## 3.12 列联表分析
+
+```{r}
+crosstab(omni_glucose$gender, omni_glucose$complications)
+```
+
+---
+
 # 4. 效应量
+
+效应量衡量组间差异的大小，不受样本量影响，是P值的重要补充。
 
 ## 4.1 Cohen's d
 
+**概念**：标准化均数差，0.2=小，0.5=中，0.8=大效应。
+
 ```{r}
-cohen_d(g1, g2)
+cohen_d(g_insulin, g_oral)
 ```
 
-## 4.2 比值比 (OR)
+## 4.2 Cohen's f（ANOVA）
+
+```{r}
+cohen_f(ss_between = 100, ss_within = 400, k = 3)
+```
+
+## 4.3 Cohen's f²（回归）
+
+```{r}
+cohen_f2(r_squared = 0.25)
+```
+
+## 4.4 比值比（OR）
+
+**案例**：从2×2列联表计算OR及其95%置信区间。
 
 ```{r}
 odds_ratio(a = 30, b = 20, c = 15, d = 35)
 ```
 
-## 4.3 相对危险度 (RR)
+## 4.5 相对危险度（RR）
 
 ```{r}
 relative_risk(a = 30, b = 50, c = 15, d = 50)
 ```
 
-## 4.4 风险比 (HR)
+## 4.6 风险比（HR）
+
+**注意**：分组变量必须为二分类，如下将治疗组分为"手术" vs 其他：
 
 ```{r}
-hazard_ratio(omni_cancer$time, omni_cancer$status, omni_cancer$treatment)
+omni_cancer$surgery <- ifelse(omni_cancer$treatment == "手术", 1, 0)
+hazard_ratio(omni_cancer$time_to_event, omni_cancer$status, omni_cancer$surgery)
 ```
 
-# 5. 可视化
+## 4.7 需治疗人数（NNT）
+
+**概念**：需要治疗多少患者才能避免1例不良结局。NNT=10表示每治疗10人可预防1例事件。
+
+```{r}
+nnt(p_treatment = 0.15, p_control = 0.25)
+```
+
+---
+
+# 5. 数据可视化
 
 ## 5.1 Kaplan-Meier生存曲线
 
-```{r, fig.show=TRUE}
-plot_km_curve(omni_cancer$time, omni_cancer$status, omni_cancer$treatment,
-              title = "Cancer Survival by Treatment")
+**案例**：三种癌症治疗方式的生存曲线比较。
+
+```{r}
+plot_km_curve(omni_cancer$time_to_event, omni_cancer$status, omni_cancer$treatment,
+              title = "不同治疗方案的生存曲线")
 ```
 
 ## 5.2 ROC曲线
 
-```{r, fig.show=TRUE}
+**案例**：评估诊断试验的区分能力。AUC=0.9956提示极佳诊断价值。
+
+```{r}
 disease_binary <- ifelse(omni_diagnostic$true_disease == "阳性", 1, 0)
-plot_roc_enhanced(omni_diagnostic$test1_result, disease_binary)
+plot_roc_enhanced(omni_diagnostic$test1_result, disease_binary,
+                  title = "诊断试验ROC曲线")
 ```
 
 ## 5.3 箱线图
 
-```{r, fig.show=TRUE}
+**案例**：不同治疗组的HbA1c分布比较。
+
+```{r}
 plot_boxplot(omni_glucose$treatment, omni_glucose$hba1c_3m,
-             title = "HbA1c by Treatment Group")
+             title = "三种治疗方案的HbA1c水平比较",
+             xlab = "治疗方案", ylab = "HbA1c (%)")
 ```
 
 ## 5.4 散点图
 
-```{r, fig.show=TRUE}
+**案例**：年龄与HbA1c的相关关系。
+
+```{r}
 plot_scatter(omni_glucose$age, omni_glucose$hba1c_3m,
-             title = "Age vs HbA1c")
+             title = "年龄与HbA1c的相关性",
+             reg_line = TRUE, conf_int = TRUE)
 ```
 
 ## 5.5 相关矩阵热图
 
-```{r, fig.show=TRUE}
-plot_correlation_matrix(omni_glucose[, c("age", "bmi", "hba1c_3m", "hba1c_baseline")])
+**案例**：血糖相关指标的相关性矩阵。
+
+```{r}
+plot_correlation_matrix(omni_glucose[, c("age", "bmi", "hba1c_baseline",
+                                          "hba1c_3m", "fasting_glucose")],
+                        title = "血糖指标相关性矩阵")
 ```
 
 ## 5.6 火山图
 
-```{r, fig.show=TRUE}
+**案例**：差异分析中标记显著变化的变量。
+
+```{r}
 set.seed(123)
 fc <- rnorm(100, 0, 2)
-p <- runif(100, 0, 1)
-plot_volcano(fc, p, title = "Example Volcano Plot")
+pval <- runif(100, 0, 1)
+plot_volcano(fc, pval, fc_threshold = 1, p_threshold = 0.05,
+             title = "差异分析火山图")
 ```
 
 ## 5.7 森林图（Meta分析）
 
-```{r, fig.show=TRUE}
+```{r}
 plot_forest_meta(
-  studies = c("Study A", "Study B", "Study C"),
-  effects = c(-0.5, -0.3, -0.7),
-  se = c(0.2, 0.15, 0.25)
+  studies = c("Smith 2020", "Johnson 2021", "Wang 2022", "Lee 2023"),
+  effects = c(-0.52, -0.31, -0.68, -0.45),
+  se = c(0.18, 0.15, 0.22, 0.19),
+  title = "Meta分析森林图：新疗法效果"
 )
 ```
 
 ## 5.8 Bland-Altman图
 
-```{r, fig.show=TRUE, eval=FALSE}
-# m1 <- rnorm(100, 100, 10)
-# m2 <- m1 + rnorm(100, 0, 5)
-# plot_bland_altman(m1, m2)
+**案例**：比较两种测量方法的一致性。
+
+```{r}
+set.seed(42)
+method1 <- rnorm(80, 100, 15)
+method2 <- method1 + rnorm(80, 2, 5)
+plot_bland_altman(method1, method2, title = "两种测量方法的一致性比较")
 ```
 
-# 6. 诊断试验
+---
+
+# 6. 诊断试验评价
+
+**概念**：评估诊断试验的灵敏度、特异度、预测值和似然比。
 
 ```{r}
 diag_test_performance(omni_diagnostic$test1_result, omni_diagnostic$true_disease)
 ```
 
+---
+
 # 7. Table One 基线特征表
+
+**概念**：临床试验论文中标准的基线特征描述，按分组展示变量的分布。
 
 ```{r}
 table_one(omni_glucose,
-          vars = c("age", "bmi", "hba1c_3m", "hba1c_baseline",
-                   "gender", "complications"),
+          vars = c("age", "bmi", "hba1c_baseline", "hba1c_3m",
+                   "gender", "complications", "diabetes_type"),
           group = "treatment")
 ```
 
+---
+
 # 8. 临床工具
+
+## 8.1 BMI计算与分类
 
 ```{r}
 calculate_bmi(weight = 70, height = 1.75)
+```
+
+## 8.2 eGFR估算（CKD-EPI 2021）
+
+```{r}
 calculate_egfr(creatinine = 1.2, age = 50, sex = "male")
 ```
 
-# 9. 工具函数
+---
+
+# 9. 实用工具函数
 
 ## 9.1 描述统计
 
@@ -337,28 +516,49 @@ summary_stats(omni_glucose$hba1c_3m)
 test_data <- omni_glucose
 test_data$age[1:5] <- NA
 imputed <- impute_missing(test_data, method = "median")
-sum(is.na(imputed$age))
+cat("填补后缺失数:", sum(is.na(imputed$age)), "\n")
 ```
 
 ## 9.3 多重比较校正
 
 ```{r}
-p <- c(0.01, 0.03, 0.05, 0.1, 0.2)
-multiple_testing_correction(p, method = "fdr")
+p_vals <- c(0.01, 0.03, 0.05, 0.1, 0.2)
+multiple_testing_correction(p_vals, method = "fdr")
 ```
 
-## 9.4 Bootstrap置信区间
+## 9.4 FWER控制（Holm-Bonferroni）
 
 ```{r}
-bootstrap_ci(omni_glucose$hba1c_3m, mean, n_bootstrap = 500)
+fwer_control(p_vals)
 ```
 
-# 10. 统计假设检验
+## 9.5 Alpha水平校正
+
+```{r}
+adjust_alpha(alpha = 0.05, k = 5)
+```
+
+## 9.6 Bootstrap置信区间
+
+```{r}
+bootstrap_ci(omni_glucose$hba1c_3m, statistic = mean, n_bootstrap = 500)
+```
+
+## 9.7 统计假设检验
 
 ```{r}
 check_assumptions(omni_glucose$hba1c_3m, "ttest",
                   group = omni_glucose$treatment)
 ```
+
+## 9.8 哑变量创建
+
+```{r}
+dummy <- create_dummy_vars(omni_glucose, vars = "treatment")
+names(dummy)[(ncol(dummy)-2):ncol(dummy)]
+```
+
+---
 
 # 参考文献
 
@@ -366,5 +566,7 @@ check_assumptions(omni_glucose$hba1c_3m, "ttest",
 - Cohen, J. (1988). *Statistical Power Analysis for the Behavioral Sciences* (2nd ed.). Lawrence Erlbaum Associates.
 - Riley, R.D., et al. (2020). Calculating the sample size required for developing a clinical prediction model. *BMJ*, 368, m441.
 - Hsieh, F.Y., Bloch, D.A., & Larsen, M.D. (1998). A simple method of sample size calculation for linear and logistic regression. *Statistics in Medicine*, 17(14), 1623-1634.
-- Farrington, C.P., & Manning, G. (1990). Test statistics and sample size formulae for comparative binomial trials with null hypothesis of non-zero risk difference or non-unity relative risk. *Statistics in Medicine*, 9(12), 1447-1454.
 - Schoenfeld, D.A. (1983). Sample-size formula for the proportional-hazards regression model. *Biometrics*, 39(2), 499-503.
+- Freedman, L.S. (1982). Tables of the number of patients required in clinical trials using the logrank test. *Statistics in Medicine*, 1(2), 121-129.
+- Hanley, J.A. & McNeil, B.J. (1982). The meaning and use of the area under a ROC curve. *Radiology*, 143(1), 29-36.
+- Buderer, N.M.F. (1996). Incorporating the prevalence of disease into the sample size calculation for sensitivity and specificity. *Academic Emergency Medicine*, 3(9), 895-900.
