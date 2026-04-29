@@ -1,7 +1,7 @@
 # OmniSciKit: Comprehensive Clinical Statistical Toolkit
 
 > 一个全面的临床研究和生物统计R包
-
+# 该包由“Abel医研统计”公众号团队开发，如遇到bug或者想提供更新建议，随时欢迎联系我们。
 [![License: GPL-3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![R >= 4.0.0](https://img.shields.io/badge/R-%3E%3D%204.0.0-blue)](https://www.r-project.org/)
 
